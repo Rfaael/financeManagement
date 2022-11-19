@@ -1,8 +1,9 @@
-import { IsEmail, IsNotEmpty, IsString, IsUUID} from "class-validator";
+import { IsDate, IsEmail, IsNotEmpty, IsOptional, IsString, IsUUID} from "class-validator";
 
 export class CreateNewUserDTO {
     @IsUUID()
-    id: string;
+    @IsOptional()
+    id?: string;
     
     //PERSONAL DATA
     @IsString()
@@ -21,4 +22,13 @@ export class CreateNewUserDTO {
 
     @IsString()
     wallet: string;
+
+    @IsString()
+    birthDate: string;
 }
+
+/*
+->Wallet -> in the wallet gonna be all the expenses, incomes and the investments.
+
+
+*/

@@ -1,18 +1,26 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
 import { CreateNewUserDTO } from './dtos/CreateNewUserDTO';
+import { UserLoginDTO } from './dtos/UserLoginDTO';
 import { UserService } from './user.service';
 
-@Controller('user')
+@Controller('users')
 export class UserController {
 
     constructor(
         private usersService: UserService
     ){}
 
+    //USER LOGIN
+    @Post('/login')
+    async login(@Body() loginUserDTO: UserLoginDTO) {
+        return this.usersService.login(loginUserDTO);
+    }
+
     //CREATE A NEW USER
+    @HttpCode(HttpStatus.CREATED)
     @Post('/create')
     async createNewUser(@Body() createUserDTO: CreateNewUserDTO) {
-
+        return this.usersService.createNewUser(createUserDTO);
     }
 
     // GET THE USER PROFILE

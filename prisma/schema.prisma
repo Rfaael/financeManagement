@@ -9,3 +9,23 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id String @unique @id
+
+  // PERSONAL DATA
+  firstName String 
+  lastName String
+
+  // PLATAFORM DATA
+  email String
+  password String
+
+  wallet String
+
+  // THIS HAVE TO BE A DATE-TIME TYPE
+  birthDate String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}

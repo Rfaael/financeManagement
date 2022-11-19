@@ -6,3 +6,7 @@ This Project need be use:
   ->Documentation.
 
 The Front-end gonna be done with: Reactjs
+
+The software need show graphics.
+
+There is a way that i can get me expenses directly from my debit card ????
