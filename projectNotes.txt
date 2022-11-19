@@ -1,0 +1,7 @@
+This Project need be use:
+  ->Docker
+  ->Postgresql
+  ->Unit test's
+  ->ORM -> Prisma
+
+The Front-end gonna be done with: Reactjs
