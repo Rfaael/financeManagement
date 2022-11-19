@@ -3,5 +3,6 @@ This Project need be use:
   ->Postgresql
   ->Unit test's
   ->ORM -> Prisma
+  ->Documentation.
 
 The Front-end gonna be done with: Reactjs
