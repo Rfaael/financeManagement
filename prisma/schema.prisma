@@ -21,10 +21,35 @@ model User {
   email String
   password String
 
-  wallet String
+  wallet Wallet[]
 
   // THIS HAVE TO BE A DATE-TIME TYPE
   birthDate String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+
+model Wallet {
+  id String @unique @id
+
+  //USER INFOS
+  user User @relation(fields: [userId], references: [id])
+  userId String
+
+  name String 
+  description String? 
+
+  plannedValue Int?
+  realValue Int?
+
+  // INCOME || EXPENSES || INVESTMENTS
+  //THESE ARE GONNA BE DATE TIME TYPE
+  type String
+  payday String?
+  //DATA DE VENCIMENTO
+  dueDate String?
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt

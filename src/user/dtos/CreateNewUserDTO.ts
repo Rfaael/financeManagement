@@ -21,9 +21,6 @@ export class CreateNewUserDTO {
     password: string;
 
     @IsString()
-    wallet: string;
-
-    @IsString()
     birthDate: string;
 }
 

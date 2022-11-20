@@ -9,6 +9,7 @@ import { AuthService } from 'src/auth/auth.service';
 //BCRYPT FO HASH THE PASSWORD
 import {hash} from "bcrypt";
 import { UpdateUserProfile } from './dtos/UpdateUserProfile';
+import { create } from 'domain';
 
 @Injectable()
 export class UserService implements UserServiceInterface{
@@ -23,16 +24,6 @@ export class UserService implements UserServiceInterface{
     }
     //============================================================
     async createNewUser(createUserDto: CreateNewUserDTO) {
-        //DESTRUCT THE USER DTO
-        const {
-            email,
-            firstName,
-            lastName,
-            password,
-            wallet,
-            birthDate
-        } = createUserDto;
-
         //VERIFY IF THE EMAIL IS ALREDY IN USE
         let verifyEmail = await this.dbClient.user.findFirst({
             where:{
@@ -47,18 +38,18 @@ export class UserService implements UserServiceInterface{
             );
         }
 
+        const {
+            password
+        } = createUserDto;
+
         //NEED TO CRYPT THE PASSWORD
         const hashPassword = await hash(password, 10);
 
         let user = await this.dbClient.user.create({
             data: {
                 id: uuid(),
-                birthDate,
-                email,
-                firstName,
-                lastName,
-                wallet,
-                password: hashPassword,
+                ...createUserDto,
+                password: hashPassword
             }
         });
 
@@ -73,6 +64,9 @@ export class UserService implements UserServiceInterface{
         const findUser = await this.dbClient.user.findUnique({
             where: {
                 id
+            },
+            include: {
+                wallet: true
             }
         });
 
