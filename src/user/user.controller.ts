@@ -1,7 +1,9 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Put, Req, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Request } from 'express';
 import { AuthService } from 'src/auth/auth.service';
 import { JwtAuthGuard } from 'src/auth/guard/jtw-auth.guard';
 import { CreateNewUserDTO } from './dtos/CreateNewUserDTO';
+import { UpdateUserProfile } from './dtos/UpdateUserProfile';
 import { UserLoginDTO } from './dtos/UserLoginDTO';
 import { UserService } from './user.service';
 
@@ -10,13 +12,12 @@ export class UserController {
 
     constructor(
         private usersService: UserService,
-        private authService: AuthService
     ){}
 
     //USER LOGIN
     @Post('/login')
     async login(@Body() loginUserDTO: UserLoginDTO) {
-        return this.authService.login(loginUserDTO);
+        return this.usersService.login(loginUserDTO);
     }
 
     //CREATE A NEW USER
@@ -29,19 +30,25 @@ export class UserController {
     // GET THE USER PROFILE
     @UseGuards(JwtAuthGuard)
     @Get()
-    async getUserProfile(@Req() req) {
-        return req.user;
+    async getUserProfile(@Req() req: Request) {
+        return this.usersService.getUserProfile(req.user);
     }
 
     // EDIT THE USER PROFILE
-    @Post('/edit/:id')  
-    async updateUserProfile(@Param('id') id: string) {
-
+    @UseGuards(JwtAuthGuard)
+    // @UsePipes(new ValidationPipe({
+    //     whitelist: true,
+    //     enableDebugMessages: true
+    // }))
+    @Patch('/update')  
+    async updateUserProfile(@Req() req: Request, @Body() updateUserProfile: UpdateUserProfile) {
+        return this.usersService.updateUserProfile(req.user, updateUserProfile);
     }
 
     // DELETE THE USER PROFILE
-    @Delete('/delete/:id')  
-    async deleteUserProfile(@Param('id') id: string) {
+    @UseGuards(JwtAuthGuard)
+    @Delete('/delete')  
+    async deleteUserProfile(@Req() req: Request) {
 
     }
 }

@@ -2,6 +2,9 @@ import { Injectable, Dependencies, HttpException, HttpStatus } from '@nestjs/com
 import { JwtService } from '@nestjs/jwt';
 import { DbclientService } from 'src/dbclient/dbclient.service';
 import { UserLoginDTO } from 'src/user/dtos/UserLoginDTO';
+//BCRYPT TO COMPARE THE PASSWORDS
+import {compare} from "bcrypt";
+
 
 @Injectable()
 export class AuthService {
@@ -31,7 +34,7 @@ export class AuthService {
     };
 
 
-    const matchPassword = password === userExists.password;
+    const matchPassword = await compare(password,userExists.password);
 
     if(!matchPassword){
         throw new HttpException(
