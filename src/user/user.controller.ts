@@ -36,10 +36,6 @@ export class UserController {
 
     // EDIT THE USER PROFILE
     @UseGuards(JwtAuthGuard)
-    @UsePipes(new ValidationPipe({
-        whitelist: true,
-        forbidNonWhitelisted: true
-    }))
     @Patch('/update')  
     async updateUserProfile(@Req() req: Request, @Body() updateUserProfile: UpdateUserProfile) {
         return this.usersService.updateUserProfile(req.user, updateUserProfile);
@@ -49,6 +45,6 @@ export class UserController {
     @UseGuards(JwtAuthGuard)
     @Delete('/delete')  
     async deleteUserProfile(@Req() req: Request) {
-
+        return this.usersService.deleteUserProfile(req.user);
     }
 }

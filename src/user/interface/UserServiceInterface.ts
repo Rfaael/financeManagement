@@ -11,4 +11,6 @@ export interface UserServiceInterface {
     getUserProfile(userPayLoad: any): Promise<any>;
     //=============================================================
     updateUserProfile(userPayLoad: any,updateUserProfile: UpdateUserProfile): Promise<string>;
+    //=============================================================
+    deleteUserProfile(userPayLoad: any): Promise<string>;
 }

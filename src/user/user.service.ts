@@ -96,23 +96,6 @@ export class UserService implements UserServiceInterface{
             lastName
         } = updateUserProfile;
 
-
-        // console.log('Tha standard keys of the model');
-        // console.log(Object.keys());
-        // console.log('===============================================');
-        // console.log("Obj that came in the request method.");
-        // console.log(updateUserProfile);
-
-        // const invalidInput = Object.keys(updateUserProfile).some(key => key == 'password');
-    
-        
-        // if(invalidInput) {
-        //     throw new HttpException(
-        //         'Invalid input.',
-        //         HttpStatus.FORBIDDEN
-        //     );
-        // }
-
         const user = await this.dbClient.user.update({
             where: {
                 id
@@ -128,5 +111,19 @@ export class UserService implements UserServiceInterface{
 
         return "User proifile updated!";
     }
+    //=============================================================
+    async deleteUserProfile(userPayLoad: any): Promise<string> {
+        const {
+            id
+        } = userPayLoad;
 
+
+        const deletedUser = await this.dbClient.user.delete({
+            where: {
+                id
+            }
+        });
+
+        return "User deleted.";
+    }
 }
