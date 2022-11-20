@@ -1,4 +1,4 @@
-import { IsEmail, IsOptional, IsString } from "class-validator";
+import { IsEmail, IsNotIn, IsOptional, IsString } from "class-validator";
 
 export class UpdateUserProfile {
     @IsOptional()

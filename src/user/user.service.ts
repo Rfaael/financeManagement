@@ -97,15 +97,21 @@ export class UserService implements UserServiceInterface{
         } = updateUserProfile;
 
 
-        const invalidInput = Object.keys(updateUserProfile).some(key => key == 'password');
+        // console.log('Tha standard keys of the model');
+        // console.log(Object.keys());
+        // console.log('===============================================');
+        // console.log("Obj that came in the request method.");
+        // console.log(updateUserProfile);
+
+        // const invalidInput = Object.keys(updateUserProfile).some(key => key == 'password');
     
         
-        if(invalidInput) {
-            throw new HttpException(
-                'Invalid input.',
-                HttpStatus.FORBIDDEN
-            );
-        }
+        // if(invalidInput) {
+        //     throw new HttpException(
+        //         'Invalid input.',
+        //         HttpStatus.FORBIDDEN
+        //     );
+        // }
 
         const user = await this.dbClient.user.update({
             where: {
@@ -118,6 +124,7 @@ export class UserService implements UserServiceInterface{
                 lastName
             }
         });
+
 
         return "User proifile updated!";
     }
