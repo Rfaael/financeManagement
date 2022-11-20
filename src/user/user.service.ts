@@ -25,7 +25,6 @@ export class UserService implements UserServiceInterface{
             }
         });
 
-
         //CHECK IF THE EMAIL EXISTS
         if(!userLogin) {
             throw new HttpException(

@@ -1,4 +1,6 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Req, UseGuards } from '@nestjs/common';
+import { AuthService } from 'src/auth/auth.service';
+import { JwtAuthGuard } from 'src/auth/guard/jtw-auth.guard';
 import { CreateNewUserDTO } from './dtos/CreateNewUserDTO';
 import { UserLoginDTO } from './dtos/UserLoginDTO';
 import { UserService } from './user.service';
@@ -7,13 +9,14 @@ import { UserService } from './user.service';
 export class UserController {
 
     constructor(
-        private usersService: UserService
+        private usersService: UserService,
+        private authService: AuthService
     ){}
 
     //USER LOGIN
     @Post('/login')
     async login(@Body() loginUserDTO: UserLoginDTO) {
-        return this.usersService.login(loginUserDTO);
+        return this.authService.login(loginUserDTO);
     }
 
     //CREATE A NEW USER
@@ -24,9 +27,10 @@ export class UserController {
     }
 
     // GET THE USER PROFILE
+    @UseGuards(JwtAuthGuard)
     @Get()
-    async getUserProfile() {
-
+    async getUserProfile(@Req() req) {
+        return req.user;
     }
 
     // EDIT THE USER PROFILE
