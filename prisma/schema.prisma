@@ -41,8 +41,8 @@ model Wallet {
   name String 
   description String? 
 
-  plannedValue Int?
-  realValue Int?
+  plannedValue Float?
+  realValue Float?
 
   // INCOME || EXPENSES || INVESTMENTS
   //THESE ARE GONNA BE DATE TIME TYPE

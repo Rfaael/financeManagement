@@ -1,8 +1,8 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsNumber, IsOptional, IsString } from "class-validator";
 
-export class RegisterNewMovimentDTO {
+export class UpdateMovimentDTO {
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     name: string;
 
     @IsString()
@@ -18,7 +18,7 @@ export class RegisterNewMovimentDTO {
     realValue: number;
 
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     type: string;
 
     @IsString()

@@ -14,3 +14,6 @@ There is a way that i can get me expenses directly from my debit card ????
 
 I need to study more about validation
   -> In nestjs validation pipes.
+
+
+Deve ser possivel especificar a quantidade de acoes que voce comprou se o type de movimentacao for de investimento.
