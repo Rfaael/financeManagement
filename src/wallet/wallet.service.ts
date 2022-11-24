@@ -6,9 +6,11 @@ import { WallerServiceInterface } from './interface/WalletServiceInterface';
 import {v4 as uuid} from "uuid";
 import { UpdateMovimentDTO } from './dtos/UpdateMovimentDTO';
 import { Wallet } from '@prisma/client';
+import e from 'express';
 
 @Injectable()
 export class WalletService implements WallerServiceInterface {
+
     constructor(
         private dbClient: DbclientService
     ){}
@@ -131,25 +133,94 @@ export class WalletService implements WallerServiceInterface {
         return;
     }
     //============================================================
-    async getAllIncomes(): Promise<any> {
-        const allIncomes = await this.dbClient.wallet.findMany();
+    async getAllIncomes(userPayload: any): Promise<any> {
+        const {
+            id: userId
+        } = userPayload;
 
-        const resultIncomes = allIncomes.reduce((acc: any, currentValue) => {
+        const allIncomes = await this.dbClient.wallet.findMany({
+            where: {
+                userId,
+                type: 'INCOME'
+            }
+        });
+
+        const totalSumIncomes = allIncomes.reduce((acc: any, currentValue) => {
             acc += currentValue.realValue;
             return acc;
         }, 0);
 
-        return resultIncomes;
+        return {
+            allIncomes,
+            totalSumIncomes
+        };
     }
     //============================================================
-    async getAllExpenses(): Promise<any> {
-        
-        return;
+    async getAllExpenses(userPayload: any): Promise<any> {
+        const {
+            id: userId
+        } = userPayload;
+
+        const allExpenses = await this.dbClient.wallet.findMany({
+            where: {
+                userId,
+                type: 'EXPENSE'
+            }
+        });
+
+        const totalSumExpenses = allExpenses.reduce((acc:any, currentValue) => {
+            acc += currentValue.realValue;
+            return acc;
+        }, 0);
+
+        return {
+            allExpenses,
+            totalSumExpenses
+        };
     }
     //============================================================
-    async getAlllInvestments(): Promise<any> {
+    async getAlllInvestments(userPayload: any): Promise<any> {
+        const {
+            id: userId
+        } = userPayload;
+
+        const allInvestments = await this.dbClient.wallet.findMany({
+            where: {
+                userId,
+                type: 'INVESTMENTS'
+            }
+        });
+
+        const totalSumInvestments = allInvestments.reduce((acc: any, currentValue) => {
+            acc += currentValue.realValue;
+            return acc;
+        }, 0);
         
-        return;
+        return{
+            allInvestments,
+            totalSumInvestments
+        };
+    }
+    //============================================================
+    async walletResume(userPayload: any): Promise<any> {
+
+        const allIncomes = await this.getAllIncomes(userPayload);
+        const allExpenses = await this.getAllExpenses(userPayload);
+        const allInvestments = await this.getAlllInvestments(userPayload);
+
+        console.log({
+            incomes: allIncomes.totalSumIncomes,
+            expenses: allExpenses.totalSumExpenses,
+            investments: allInvestments.totalSumInvestments,
+            finalResult: allIncomes.totalSumIncomes - allExpenses.totalSumExpenses
+        });
+
+        return {
+            incomes: allIncomes.totalSumIncomes,
+            expenses: allExpenses.totalSumExpenses,
+            investments: allInvestments.totalSumInvestments,
+            finalResult: allIncomes.totalSumIncomes - allExpenses.totalSumExpenses
+        };
     }
 
 }

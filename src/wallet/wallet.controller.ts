@@ -6,10 +6,10 @@ import { UpdateMovimentDTO } from './dtos/UpdateMovimentDTO';
 import { WalletService } from './wallet.service';
 
 @Controller('wallet')
-export class WalletController{
+export class WalletController {
     constructor(
         private walletService: WalletService
-    ){}
+    ) { }
 
     //CREATE A NEW MOVEMENT IN THE WALLET
     @UseGuards(JwtAuthGuard)
@@ -24,9 +24,16 @@ export class WalletController{
         return this.walletService.getWallet(req.user);
     }
 
+    //GET THE WALLET BALANCE
+    @UseGuards(JwtAuthGuard)
+    @Get('/resume')
+    async teste(@Req() req: Request) {
+        return this.walletService.walletResume(req.user);
+    }
+
     @UseGuards(JwtAuthGuard)
     @Get('/:id')
-    async getMovimentById(@Param('id') id:string, @Req() req: Request) {
+    async getMovimentById(@Param('id') id: string, @Req() req: Request) {
         return this.walletService.getMovimentById(id, req.user);
     }
 
@@ -41,13 +48,9 @@ export class WalletController{
     @HttpCode(HttpStatus.NO_CONTENT)
     @UseGuards(JwtAuthGuard)
     @Delete('/delete/:id')
-    async deleteMovimentById(@Param('id') id:string, @Req() req: Request){
+    async deleteMovimentById(@Param('id') id: string, @Req() req: Request) {
         return this.walletService.deleteMovimentById(id, req.user);
     }
 
-    //GET THE WALLET BALANCE
-    @Get('/123/teste')
-    async teste(@Res() res: Response) {
-        return this.walletService.getAllIncomes();
-    }
+
 }
