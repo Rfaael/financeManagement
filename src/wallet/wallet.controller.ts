@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
-import { Request } from 'express';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { JwtAuthGuard } from 'src/auth/guard/jtw-auth.guard';
 import { RegisterNewMovimentDTO } from './dtos/RegisterNewMovementDTO';
 import { UpdateMovimentDTO } from './dtos/UpdateMovimentDTO';
@@ -43,5 +43,11 @@ export class WalletController{
     @Delete('/delete/:id')
     async deleteMovimentById(@Param('id') id:string, @Req() req: Request){
         return this.walletService.deleteMovimentById(id, req.user);
+    }
+
+    //GET THE WALLET BALANCE
+    @Get('/123/teste')
+    async teste(@Res() res: Response) {
+        return this.walletService.getAllIncomes();
     }
 }

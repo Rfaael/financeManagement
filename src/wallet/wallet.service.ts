@@ -13,6 +13,7 @@ export class WalletService implements WallerServiceInterface {
         private dbClient: DbclientService
     ){}
 
+
     //============================================================
     async registerNewMoviment(registerNewMoviment: RegisterNewMovimentDTO, userPayload: any): Promise<void> {
         const {
@@ -129,4 +130,26 @@ export class WalletService implements WallerServiceInterface {
 
         return;
     }
+    //============================================================
+    async getAllIncomes(): Promise<any> {
+        const allIncomes = await this.dbClient.wallet.findMany();
+
+        const resultIncomes = allIncomes.reduce((acc: any, currentValue) => {
+            acc += currentValue.realValue;
+            return acc;
+        }, 0);
+
+        return resultIncomes;
+    }
+    //============================================================
+    async getAllExpenses(): Promise<any> {
+        
+        return;
+    }
+    //============================================================
+    async getAlllInvestments(): Promise<any> {
+        
+        return;
+    }
+
 }

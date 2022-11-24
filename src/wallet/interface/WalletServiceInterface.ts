@@ -9,4 +9,8 @@ export interface WallerServiceInterface {
     getWallet(userPayload: any): Promise<Wallet[] | string>;
     getMovimentById(id: string, userPayload: any): Promise<Wallet | string>;
     deleteMovimentById(id: string, userPayload: any): Promise<void | HttpException>;
+
+    getAllIncomes(): Promise<any>;
+    getAllExpenses(): Promise<any>;
+    getAlllInvestments(): Promise<any>;
 }
