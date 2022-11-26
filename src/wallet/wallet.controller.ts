@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Request} from 'express';
 import { JwtAuthGuard } from 'src/auth/guard/jtw-auth.guard';
 import { RegisterNewMovimentDTO } from './dtos/RegisterNewMovementDTO';
 import { UpdateMovimentDTO } from './dtos/UpdateMovimentDTO';
@@ -51,6 +51,4 @@ export class WalletController {
     async deleteMovimentById(@Param('id') id: string, @Req() req: Request) {
         return this.walletService.deleteMovimentById(id, req.user);
     }
-
-
 }

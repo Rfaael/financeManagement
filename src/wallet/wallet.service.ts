@@ -6,7 +6,6 @@ import { WallerServiceInterface } from './interface/WalletServiceInterface';
 import {v4 as uuid} from "uuid";
 import { UpdateMovimentDTO } from './dtos/UpdateMovimentDTO';
 import { Wallet } from '@prisma/client';
-import e from 'express';
 
 @Injectable()
 export class WalletService implements WallerServiceInterface {

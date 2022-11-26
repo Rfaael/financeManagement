@@ -17,3 +17,13 @@ I need to study more about validation
 
 
 Deve ser possivel especificar a quantidade de acoes que voce comprou se o type de movimentacao for de investimento.
+
+
+->CALENDARIO COM LEMBRETE..
+
+->EXTRATO EM PDF...
+
+->RESUMO EM GRAFICOS
+
+
+-> PESQUISAR SOBRE API DO NU BANK
