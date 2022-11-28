@@ -3,16 +3,17 @@ import { DbclientService } from 'src/dbclient/dbclient.service';
 import { RegisterNewMovimentDTO } from './dtos/RegisterNewMovementDTO';
 import { WallerServiceInterface } from './interface/WalletServiceInterface';
 //UUID FOR THE ID 
-import {v4 as uuid} from "uuid";
+import { v4 as uuid } from "uuid";
 import { UpdateMovimentDTO } from './dtos/UpdateMovimentDTO';
 import { Wallet } from '@prisma/client';
+import { format } from 'path';
 
 @Injectable()
 export class WalletService implements WallerServiceInterface {
 
     constructor(
         private dbClient: DbclientService
-    ){}
+    ) { }
 
 
     //============================================================
@@ -46,7 +47,7 @@ export class WalletService implements WallerServiceInterface {
             }
         });
 
-        if(!moviment) {
+        if (!moviment) {
             throw new HttpException(
                 'This moviment does not belongs to you.',
                 HttpStatus.FORBIDDEN
@@ -70,16 +71,17 @@ export class WalletService implements WallerServiceInterface {
             id: userId
         } = userPayload;
 
-
         const wallet = await this.dbClient.wallet.findMany({
             where: {
                 userId
             }
         });
 
-        if(wallet.length == 0) {
+
+        if (wallet.length == 0) {
             return 'The wallet is empty!';
         }
+
         return wallet;
     }
     //============================================================
@@ -95,7 +97,7 @@ export class WalletService implements WallerServiceInterface {
             }
         });
 
-        if(!moviment) {
+        if (!moviment) {
             return "This moviment does not exists.";
         }
 
@@ -111,12 +113,12 @@ export class WalletService implements WallerServiceInterface {
 
         const movimentBelongsToUser = await this.dbClient.wallet.findFirst({
             where: {
-                id, 
+                id,
                 userId
             }
         });
 
-        if(!movimentBelongsToUser) {
+        if (!movimentBelongsToUser) {
             throw new HttpException(
                 'This moviment does not belongs to this user.',
                 HttpStatus.NOT_FOUND
@@ -167,7 +169,7 @@ export class WalletService implements WallerServiceInterface {
             }
         });
 
-        const totalSumExpenses = allExpenses.reduce((acc:any, currentValue) => {
+        const totalSumExpenses = allExpenses.reduce((acc: any, currentValue) => {
             acc += currentValue.realValue;
             return acc;
         }, 0);
@@ -194,8 +196,8 @@ export class WalletService implements WallerServiceInterface {
             acc += currentValue.realValue;
             return acc;
         }, 0);
-        
-        return{
+
+        return {
             allInvestments,
             totalSumInvestments
         };
@@ -221,5 +223,5 @@ export class WalletService implements WallerServiceInterface {
             finalResult: allIncomes.totalSumIncomes - allExpenses.totalSumExpenses
         };
     }
-
+    //============================================================
 }

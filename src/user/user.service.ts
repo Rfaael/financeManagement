@@ -66,7 +66,7 @@ export class UserService implements UserServiceInterface{
                 id
             },
             include: {
-                wallet: true
+                wallet: false
             }
         });
 
