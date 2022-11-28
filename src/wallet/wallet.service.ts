@@ -6,7 +6,9 @@ import { WallerServiceInterface } from './interface/WalletServiceInterface';
 import { v4 as uuid } from "uuid";
 import { UpdateMovimentDTO } from './dtos/UpdateMovimentDTO';
 import { Wallet } from '@prisma/client';
-import { format } from 'path';
+
+import fs from "fs";
+import pdfmake from "pdfmake";
 
 @Injectable()
 export class WalletService implements WallerServiceInterface {
@@ -204,17 +206,9 @@ export class WalletService implements WallerServiceInterface {
     }
     //============================================================
     async walletResume(userPayload: any): Promise<any> {
-
         const allIncomes = await this.getAllIncomes(userPayload);
         const allExpenses = await this.getAllExpenses(userPayload);
         const allInvestments = await this.getAlllInvestments(userPayload);
-
-        console.log({
-            incomes: allIncomes.totalSumIncomes,
-            expenses: allExpenses.totalSumExpenses,
-            investments: allInvestments.totalSumInvestments,
-            finalResult: allIncomes.totalSumIncomes - allExpenses.totalSumExpenses
-        });
 
         return {
             incomes: allIncomes.totalSumIncomes,
