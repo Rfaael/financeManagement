@@ -1,14 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DbclientService } from 'src/dbclient/dbclient.service';
-import { RegisterNewMovimentDTO } from './dtos/RegisterNewMovementDTO';
+import { RegisterNewMovementDTO } from './dtos/RegisterNewMovementDTO';
 import { WallerServiceInterface } from './interface/WalletServiceInterface';
 //UUID FOR THE ID 
 import { v4 as uuid } from "uuid";
-import { UpdateMovimentDTO } from './dtos/UpdateMovimentDTO';
+import { UpdateMovementDTO } from './dtos/UpdateMovementDTO';
 import { Wallet } from '@prisma/client';
-
-import fs from "fs";
-import pdfmake from "pdfmake";
 
 @Injectable()
 export class WalletService implements WallerServiceInterface {
@@ -19,49 +16,49 @@ export class WalletService implements WallerServiceInterface {
 
 
     //============================================================
-    async registerNewMoviment(registerNewMoviment: RegisterNewMovimentDTO, userPayload: any): Promise<void> {
+    async registerNewMovement(registerNewMovement: RegisterNewMovementDTO, userPayload: any): Promise<void> {
         const {
             id
         } = userPayload;
 
 
-        const walletMoviment = await this.dbClient.wallet.create({
+        const walletMovement = await this.dbClient.wallet.create({
             data: {
                 id: uuid(),
                 userId: id,
-                ...registerNewMoviment,
-                type: registerNewMoviment.type.toUpperCase()
+                ...registerNewMovement,
+                type: registerNewMovement.type.toUpperCase()
             }
         });
 
         return;
     }
     //============================================================
-    async updateMoviment(id: string, userPayload: any, updateMovimentDTO: UpdateMovimentDTO): Promise<void> {
+    async updateMovement(id: string, userPayload: any, updateMovementDTO: UpdateMovementDTO): Promise<void> {
         const {
             id: userId
         } = userPayload;
 
-        const moviment = await this.dbClient.wallet.findFirst({
+        const Movement = await this.dbClient.wallet.findFirst({
             where: {
                 id,
                 userId
             }
         });
 
-        if (!moviment) {
+        if (!Movement) {
             throw new HttpException(
-                'This moviment does not belongs to you.',
+                'This Movement does not belongs to you.',
                 HttpStatus.FORBIDDEN
             );
         };
 
-        const updatedMoviment = await this.dbClient.wallet.update({
+        const updatedMovement = await this.dbClient.wallet.update({
             where: {
                 id
             },
             data: {
-                ...updateMovimentDTO
+                ...updateMovementDTO
             }
         });
 
@@ -87,47 +84,45 @@ export class WalletService implements WallerServiceInterface {
         return wallet;
     }
     //============================================================
-    async getMovimentById(id: string, userPayload: any): Promise<Wallet | string> {
+    async getMovementById(id: string, userPayload: any): Promise<Wallet | string> {
         const {
             id: userId
         } = userPayload;
 
-        const moviment = await this.dbClient.wallet.findFirst({
+        const Movement = await this.dbClient.wallet.findFirst({
             where: {
                 id,
                 userId
             }
         });
 
-        if (!moviment) {
-            return "This moviment does not exists.";
+        if (!Movement) {
+            return "This Movement does not exists.";
         }
 
-        return moviment;
+        return Movement;
     }
     //============================================================
-    async deleteMovimentById(id: string, userPayload: any): Promise<void | HttpException> {
+    async deleteMovementById(id: string, userPayload: any): Promise<void | HttpException> {
         const {
             id: userId
         } = userPayload;
 
-        console.log(id);
-
-        const movimentBelongsToUser = await this.dbClient.wallet.findFirst({
+        const MovementBelongsToUser = await this.dbClient.wallet.findFirst({
             where: {
                 id,
                 userId
             }
         });
 
-        if (!movimentBelongsToUser) {
+        if (!MovementBelongsToUser) {
             throw new HttpException(
-                'This moviment does not belongs to this user.',
+                'This Movement does not belongs to this user.',
                 HttpStatus.NOT_FOUND
             );
         };
 
-        const deletedMoviment = await this.dbClient.wallet.delete({
+        const deletedMovement = await this.dbClient.wallet.delete({
             where: {
                 id
             }
@@ -218,4 +213,22 @@ export class WalletService implements WallerServiceInterface {
         };
     }
     //============================================================
+    async returnAllMovementsByDate(userPayload: any, date: string): Promise<any[]> {
+        const {
+            userId
+        } = userPayload;
+
+
+        const allMovements = await this.dbClient.wallet.findMany({
+            where: {
+                userId,
+            }
+        });
+
+        let formatedInputDate = Object.keys(date)[0] != 'date' ? new Date().getDate() : new Date(date['date']).getDate();
+
+        const movementsChecked = allMovements.filter( mv => Number(mv.created_at.getDate()) == formatedInputDate);
+        
+        return movementsChecked;
+    }
 }
