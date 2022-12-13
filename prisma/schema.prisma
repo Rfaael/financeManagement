@@ -30,13 +30,34 @@ model User {
   updated_at DateTime @updatedAt
 }
 
-
 model Wallet {
   id String @unique @id
 
   //USER INFOS
   user User @relation(fields: [userId], references: [id])
   userId String
+
+  name String?
+
+  //VALOR INICIAL DESTA CARTEIRA
+  value Int
+
+  //MOEDA A SER ULTILIZADA DENTRO DESTA CARTEIRA
+  currency String?
+
+  //TODAS AS MOVIMENTACOES RELACIONADAS COM ESTA CARTEIRA
+  movement Movement[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Movement {
+  id String @unique @id
+
+  //WALLET ID
+  wallet Wallet @relation(fields: [wallet_id], references: [id])
+  wallet_id String
 
   name String 
   description String? 
