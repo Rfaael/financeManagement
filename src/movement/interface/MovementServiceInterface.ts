@@ -4,7 +4,7 @@ import { RegisterNewMovementDTO } from "../dtos/RegisterNewMovementDTO";
 import { UpdateMovementDTO } from "../dtos/UpdateMovementDTO";
 
 export interface MovementServiceInterface {
-    registerNewMovement(registerNewMovement: RegisterNewMovementDTO, wallet_id: string): Promise<void>;
+    registerNewMovement(registerNewMovement: RegisterNewMovementDTO, wallet_id: string, userpayload: any): Promise<void>;
     updateMovement(movement_id: string, wallet_id: string, updateMovementDTO: UpdateMovementDTO): Promise<void>;
     getMovementById(movement_id: string, wallet_id: string): Promise<Movement | string>;
     deleteMovementById(movement_id: string, wallet_id: string): Promise<void | HttpException>;

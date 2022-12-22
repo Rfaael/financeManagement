@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MovementController } from './movement.controller';
 
-describe('WalletController', () => {
+describe('MovementController', () => {
   let controller: MovementController;
 
   beforeEach(async () => {

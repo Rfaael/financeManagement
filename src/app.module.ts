@@ -5,6 +5,7 @@ import { UserModule } from './user/user.module';
 import { DbclientModule } from './dbclient/dbclient.module';
 import { AuthModule } from './auth/auth.module';
 import { WalletModule } from './wallet/wallet.module';
+import { MovementModule } from './movement/movement.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { WalletModule } from './wallet/wallet.module';
     DbclientModule,
     AuthModule,
     WalletModule,
+    MovementModule
   ],
   controllers: [AppController],
   providers: [

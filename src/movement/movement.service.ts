@@ -15,27 +15,45 @@ export class MovementService implements MovementServiceInterface {
     ) { }
 
     //============================================================
-    async registerNewMovement(registerNewMovement: RegisterNewMovementDTO, wallet_id: string): Promise<void> {
+    async registerNewMovement(registerNewMovement: RegisterNewMovementDTO, wallet_id: string, userpayload: any): Promise<void> {
+
+        const {
+            id: userId
+        } = userpayload;
+
 
         //NECESSARIO VERIFICAR SE O CARTEIRA INFORMADA EXISTE
         //VERIFICAR SE A CARTEIRA PERTENCE AO USUARIO QUE ESTA EFETUANDO O CADASTRO
-
         let walletExists = await this.dbClient.wallet.findFirst({
             where: {
-                id: wallet_id
+                id: wallet_id,
+                userId
             }
         });
 
         if(!walletExists) {
-            throw new HttpException('This wallet does not exists!', HttpStatus.NOT_FOUND);
+            throw new HttpException('This wallet does not exists or not belongs to the user!', HttpStatus.NOT_FOUND);
         };
 
+        //FAZ O CADASTRO DA NOVA MOVIMENTACAO
         const walletMovement = await this.dbClient.movement.create({
             data: {
                 id: uuid(),
                 wallet_id,
                 ...registerNewMovement,
                 type: registerNewMovement.type.toUpperCase()
+            }
+        });
+
+        const newWalletValue = registerNewMovement.type.toUpperCase() != 'EXPENSE' ? walletExists.value + registerNewMovement.realValue: walletExists.value - registerNewMovement.realValue;
+
+        //O VALOR DA MOVIMENTACAO DEVE SER ATUALIZADO COM O SALDO DA WALLET
+        let updateWalletValue = await this.dbClient.wallet.update({
+            where:{
+                id: wallet_id
+            },
+            data: {
+                value: newWalletValue
             }
         });
 
@@ -72,25 +90,6 @@ export class MovementService implements MovementServiceInterface {
 
         return;
     }
-    //============================================================
-    // async getWallet(userPayload: any): Promise<Movement[] | string> {
-    //     const {
-    //         id: userId
-    //     } = userPayload;
-
-    //     const wallet = await this.dbClient.movement.findMany({
-    //         where: {
-    //             wallet_id
-    //         }
-    //     });
-
-
-    //     if (wallet.length == 0) {
-    //         return 'The wallet is empty!';
-    //     }
-
-    //     return wallet;
-    // }
     //============================================================
     async getMovementById(movement_id: string, wallet_id: string): Promise<Movement | string> {
 
@@ -192,19 +191,6 @@ export class MovementService implements MovementServiceInterface {
         };
     }
     //============================================================
-    // async walletResume(userPayload: any): Promise<any> {
-    //     const allIncomes = await this.getAllIncomes(userPayload);
-    //     const allExpenses = await this.getAllExpenses(userPayload);
-    //     const allInvestments = await this.getAlllInvestments(userPayload);
-
-    //     return {
-    //         incomes: allIncomes.totalSumIncomes,
-    //         expenses: allExpenses.totalSumExpenses,
-    //         investments: allInvestments.totalSumInvestments,
-    //         finalResult: allIncomes.totalSumIncomes - allExpenses.totalSumExpenses
-    //     };
-    // }
-    //============================================================
     async returnAllMovementsByDate(wallet_id: string, date: string): Promise<any[]> {
         const allMovements = await this.dbClient.movement.findMany({
             where: {
@@ -218,4 +204,5 @@ export class MovementService implements MovementServiceInterface {
         
         return movementsChecked;
     }
+
 }

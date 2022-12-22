@@ -8,4 +8,4 @@ import { DbclientService } from 'src/dbclient/dbclient.service';
   providers: [MovementService, DbclientService],
   controllers: [MovementController],
 })
-export class WalletModule {}
+export class MovementModule {}

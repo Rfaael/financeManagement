@@ -1,4 +1,4 @@
-import { IsDate, IsDateString, IsNotEmpty, IsNumber, IsOptional, isString, IsString } from "class-validator";
+import {IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class RegisterNewMovementDTO {
     @IsString()

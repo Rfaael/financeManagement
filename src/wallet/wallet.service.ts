@@ -56,6 +56,9 @@ export class WalletService implements WalletServiceInterface{
         const allWallets = await this.dbClient.wallet.findMany({
             where: {
                 userId
+            },
+            include: {
+                movement: true
             }
         });
 
