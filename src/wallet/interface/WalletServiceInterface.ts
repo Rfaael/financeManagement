@@ -1,5 +1,6 @@
 import { HttpException } from "@nestjs/common";
 import { Wallet } from "@prisma/client";
+import { Request } from "express";
 import { CreateNewWalletDTO } from "../dtos/CreateNewWalletDTO";
 import { UpdateWalletDTO } from "../dtos/UpdateWalletDTO";
 
@@ -13,10 +14,6 @@ export interface WalletServiceInterface {
     //RETURN WALLET RESUME BY THEIR ID
     getWalletResume(wallet_id: string, userpayload: any): Promise<any>;
     //RETURN ALL WALLET EXPENSES
-    getWalletExpenses(wallet_id: string, userpayload: any): Promise<any>;
-    //RETURN ALL WALLET INCOMES
-    getWalletIncomes(wallet_id: string, userpayload: any): Promise<any>;
-    //RETURN ALL WALLET INVESTMENTS]
-    getWalletInvestments(wallet_id: string, userpayload: any): Promise<any>;
+    getWalletInfo(wallet_id: string, userpayload: any, req: Request): Promise<any>;
 
 }

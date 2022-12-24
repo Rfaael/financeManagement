@@ -6,6 +6,7 @@ import { CreateNewWalletDTO } from './dtos/CreateNewWalletDTO';
 import { DbclientService } from 'src/dbclient/dbclient.service';
 import { Wallet } from '@prisma/client';
 import { UpdateWalletDTO } from './dtos/UpdateWalletDTO';
+import { Request } from 'express';
 
 @Injectable()
 export class WalletService implements WalletServiceInterface{
@@ -166,7 +167,10 @@ export class WalletService implements WalletServiceInterface{
         return walletResume;
     }
     //============================================================
-    async getWalletExpenses(wallet_id: string, userpayload: any): Promise<any> {
+    async getWalletInfo(wallet_id: string, userpayload: any,req: Request): Promise<any> {
+
+        const movType = req.url.split('/')[2].toUpperCase();
+
         const {
             id: userId
         } = userpayload;
@@ -185,7 +189,7 @@ export class WalletService implements WalletServiceInterface{
         const allExpenses = await this.dbClient.movement.findMany({
             where: {
                 wallet_id,
-                type: "EXPENSE"
+                type: movType
             }
         });
 
@@ -199,7 +203,11 @@ export class WalletService implements WalletServiceInterface{
     }
     //============================================================
     getWalletIncomes(wallet_id: string, userpayload: any): Promise<any> {
-        throw new Error('Method not implemented.');
+        const {
+            id: userId
+        } = userpayload;
+
+        return;
     }
     //============================================================
     getWalletInvestments(wallet_id: string, userpayload: any): Promise<any> {
