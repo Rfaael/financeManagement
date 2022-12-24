@@ -14,8 +14,6 @@ export class WalletService implements WalletServiceInterface{
         private dbClient: DbclientService
     ){}
 
-
-
     //============================================================
     async createNewWallet(createNewWalletDTO: CreateNewWalletDTO, userpayload: any): Promise<String> {
         
@@ -123,5 +121,88 @@ export class WalletService implements WalletServiceInterface{
         });
 
         return 'Updated!';
+    }
+    //============================================================
+    async getWalletResume(wallet_id: string, userpayload: any): Promise<any> {
+        const {
+            id: userId
+        } = userpayload;
+
+        //VERIFICAR SE A WALLET PERTENCE AO USUARIO]
+        //VERIFICAR SE A WALLET EXISTE
+        const walletVerif = await this.dbClient.wallet.findFirst({
+            where: {
+                id: wallet_id,
+                userId
+            }
+        });
+
+        if(!walletVerif) {
+            throw new HttpException('This wallet does not belongs to the user or does not exists!', HttpStatus.BAD_REQUEST);
+        };
+
+        //PEGAR TODAS AS MOVIMENTACOES DA WALLET PARA RETORNAR O RESUMO DA MESMA
+        /*
+        -O RESUMO DEVE RETORNAR SEPARADAMENTES AS DESPESAS, GANHOS E INVESTIMENTOS.
+        */
+        const allMovementsInWallet = await this.dbClient.movement.findMany({
+            where: {
+                wallet_id,
+            }
+        });
+
+
+        const walletResume = allMovementsInWallet.reduce((acc, mov) => {
+            if(mov.type == 'EXPENSE') {
+                acc.exp += mov.realValue;
+            }else if(mov.type == 'INCOME') {
+                acc.inc += mov.realValue;
+            }else {
+                acc.inv += mov.realValue;
+            }
+            return acc;
+        }, {exp: 0, inc: 0, inv: 0});
+
+        return walletResume;
+    }
+    //============================================================
+    async getWalletExpenses(wallet_id: string, userpayload: any): Promise<any> {
+        const {
+            id: userId
+        } = userpayload;
+        //VERIFY IF THE WALLET BELONGS TO THE USER
+        const checkWallet = await this.dbClient.wallet.findFirst({
+            where: {
+                id: wallet_id,
+                userId
+            }
+        });
+
+        if(!checkWallet) {
+            throw new HttpException('This wallet does not belongs to this user or does not exists.', 404);
+        }
+
+        const allExpenses = await this.dbClient.movement.findMany({
+            where: {
+                wallet_id,
+                type: "EXPENSE"
+            }
+        });
+
+
+        const totalExpenses = allExpenses.reduce((acc, mov) => {
+            acc += mov.realValue;
+            return acc;
+        }, 0);
+
+        return {allExpenses, TOTAL: totalExpenses};
+    }
+    //============================================================
+    getWalletIncomes(wallet_id: string, userpayload: any): Promise<any> {
+        throw new Error('Method not implemented.');
+    }
+    //============================================================
+    getWalletInvestments(wallet_id: string, userpayload: any): Promise<any> {
+        throw new Error('Method not implemented.');
     }
 }
