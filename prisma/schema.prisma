@@ -11,67 +11,40 @@ datasource db {
 }
 
 model User {
-  id String @unique @id
-
-  // PERSONAL DATA
-  firstName String 
-  lastName String
-
-  // PLATAFORM DATA
-  email String
-  password String
-
-  wallet Wallet[]
-
-  // THIS HAVE TO BE A DATE-TIME TYPE
-  birthDate String
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id          String @unique @id
+  firstName   String 
+  lastName    String
+  email       String
+  password    String
+  wallet      Wallet[] 
+  birthDate   String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
 }
 
 model Wallet {
-  id String @unique @id
-
-  //USER INFOS
-  user User @relation(fields: [userId], references: [id])
-  userId String
-
-  name String?
-
-  //VALOR INICIAL DESTA CARTEIRA
-  value Int
-
-  //MOEDA A SER ULTILIZADA DENTRO DESTA CARTEIRA
-  currency String?
-
-  //TODAS AS MOVIMENTACOES RELACIONADAS COM ESTA CARTEIRA
-  movement Movement[]
-
+  id         String @unique @id
+  user       User @relation(fields: [userId], references: [id])
+  userId     String
+  name       String?
+  value      Int
+  currency   String?
+  movement   Movement[]
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }
 
 model Movement {
-  id String @unique @id
-
-  //WALLET ID
-  wallet Wallet @relation(fields: [wallet_id], references: [id])
-  wallet_id String
-
-  name String 
-  description String? 
-
-  plannedValue Float?
-  realValue Float?
-
-  // INCOME || EXPENSES || INVESTMENTS
-  //THESE ARE GONNA BE DATE TIME TYPE
-  type String
-  payday String?
-  //DATA DE VENCIMENTO
-  dueDate String?
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id            String @unique @id
+  wallet        Wallet @relation(fields: [wallet_id], references: [id])
+  wallet_id     String
+  name          String 
+  description   String? 
+  plannedValue  Float?
+  realValue     Float?
+  type          String
+  payday        String?
+  dueDate       String?
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
 }

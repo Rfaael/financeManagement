@@ -9,11 +9,9 @@ export interface MovementServiceInterface {
     getMovementById(movement_id: string, wallet_id: string): Promise<Movement | string>;
     deleteMovementById(movement_id: string, wallet_id: string): Promise<void | HttpException>;
 
-
     getAllIncomes(wallet_id: string): Promise<any>;
     getAllExpenses(wallet_id: string): Promise<any>;
     getAlllInvestments(wallet_id: string): Promise<any>;
     //RETORNA TODOS OS MOVIMENTOS DE ACORDO COM A DATA INFORMADA.
     returnAllMovementsByDate(wallet_id: string, date: string): Promise<Movement[]>;
-
 }

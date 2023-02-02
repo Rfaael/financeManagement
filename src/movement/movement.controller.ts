@@ -25,7 +25,6 @@ export class MovementController {
         return this.movementService.returnAllMovementsByDate(wallet_id, date);
     }
 
-
     //GET A SPECIFIC MOVEMENT BY ID
     @UseGuards(JwtAuthGuard)
     @Get('/:wallet_id/:movement_id')

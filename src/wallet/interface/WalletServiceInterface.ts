@@ -10,10 +10,8 @@ export interface WalletServiceInterface {
     deleteWalletById(wallet_id: string, userpayload: any): Promise<String | HttpException>;
     updateWalletById(wallet_id: string, userpayload: any, updateWalletDTO: UpdateWalletDTO): Promise<HttpException | String>;
 
-
     //RETURN WALLET RESUME BY THEIR ID
     getWalletResume(wallet_id: string, userpayload: any): Promise<any>;
-    //RETURN ALL WALLET EXPENSES
+    //RETURN ALL WALLET EXPENSES | INCOMES | INVESTMENTS
     getWalletInfo(wallet_id: string, userpayload: any, req: Request): Promise<any>;
-
 }
